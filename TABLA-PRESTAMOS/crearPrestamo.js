@@ -17,7 +17,7 @@ exports.lambdaHandler = async (event) => {
   try {
     // Parsear el cuerpo de la solicitud
     const data = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-    console.log(Datos recibidos: ${JSON.stringify(data)});
+    console.log(`Datos recibidos: ${JSON.stringify(data)}`);
 
     const usuario_id = data.usuario_id;
     const cuenta_id = data.cuenta_id;
@@ -48,7 +48,7 @@ exports.lambdaHandler = async (event) => {
       fecha_creacion,
       fecha_vencimiento,
     };
-    console.log(Préstamo a registrar: ${JSON.stringify(prestamoItem)});
+    console.log(`Préstamo a registrar: ${JSON.stringify(prestamoItem)}`);
 
     // Guardar el préstamo en DynamoDB
     await dynamodb
@@ -67,7 +67,7 @@ exports.lambdaHandler = async (event) => {
       },
     };
   } catch (error) {
-    console.error(Error: ${error.message});
+    console.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
       body: JSON.stringify({
