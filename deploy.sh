@@ -17,6 +17,7 @@ do
     fi
     echo "Running npm install in $service..."
     npm install
+    npm install uuid
   fi
 
   npx serverless deploy
