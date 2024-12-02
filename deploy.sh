@@ -18,6 +18,7 @@ do
     echo "Running npm install in $service..."
     npm install
     npm install uuid
+    npm install aws-sdk
   fi
 
   npx serverless deploy
