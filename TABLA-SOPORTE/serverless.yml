@@ -3,7 +3,7 @@ service: api-soporte
 
 provider:
   name: aws
-  runtime: python3.12
+  runtime: nodejs16.x  # Cambiar de python3.12 a nodejs18.x
   memorySize: 1024
   timeout: 30
   iam:
@@ -13,7 +13,7 @@ provider:
 
 functions:
   CrearSolicitud:
-    handler: CrearSolicitud.lambda_handler
+    handler: CrearSolicitud.lambda_handler  # Cambiar el manejador de Python a Node.js
     events:
       - http:
           path: /soporte/crear
@@ -22,7 +22,7 @@ functions:
           integration: lambda
 
   EliminarSolicitud:
-    handler: EliminarSolicitud.lambda_handler
+    handler: EliminarSolicitud.lambda_handler  # Actualizar para usar código Node.js
     events:
       - http:
           path: /soporte/eliminar
@@ -31,7 +31,7 @@ functions:
           integration: lambda
 
   EditarSolicitud:
-    handler: EditarSolicitud.lambda_handler
+    handler: EditarSolicitud.lambda_handler  # Lo mismo aquí
     events:
       - http:
           path: /soporte/editar
@@ -40,7 +40,7 @@ functions:
           integration: lambda
 
   ObtenerSolicitud:
-    handler: ObtenerSolicitud.lambda_handler
+    handler: ObtenerSolicitud.lambda_handler  # Actualizar manejador
     events:
       - http:
           path: /soporte/obtener
@@ -49,7 +49,7 @@ functions:
           integration: lambda
 
   ListarSolicitudes:
-    handler: ListarSolicitudes.lambda_handler
+    handler: ListarSolicitudes.lambda_handler  # Cambiar a Node.js
     events:
       - http:
           path: /soporte/listar
@@ -58,7 +58,7 @@ functions:
           integration: lambda
 
   ListarSolicitudesPorUsuario:
-    handler: ListarSolicitudesPorUsuario.lambda_handler
+    handler: ListarSolicitudesPorUsuario.lambda_handler  # Actualizar para Node.js
     events:
       - http:
           path: /soporte/listar-usuario
@@ -67,7 +67,7 @@ functions:
           integration: lambda
 
   ResponderSolicitud:
-    handler: ResponderSolicitud.lambda_handler
+    handler: ResponderSolicitud.lambda_handler  # Cambiar a Node.js
     events:
       - http:
           path: /soporte/responder
