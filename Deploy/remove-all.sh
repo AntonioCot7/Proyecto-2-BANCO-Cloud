@@ -29,20 +29,27 @@ check_and_chmod
 
 
 # Ejecutar los tres scripts de eliminación
+echo "Ingresando al directorio de scripts..."
+cd "$SCRIPT_DIR"
+
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-dev.sh..."
-$SCRIPT_DIR/remove-dev.sh
-echo "REMOVE STAGE DEV COMPLETADO"
+./remove-dev.sh
+echo "DEPLOY STAGE DEV COMPLETADO"
 
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-prod.sh..."
-$SCRIPT_DIR/remove-prod.sh
-echo "REMOVE STAGE PROD COMPLETADO"
+./remove-prod.sh
+echo "DEPLOY STAGE PROD COMPLETADO"
 
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-test.sh..."
-$SCRIPT_DIR/remove-test.sh
-echo "REMOVE STAGE TEST COMPLETADO"
+./remove-test.sh
+echo "DEPLOY STAGE TEST COMPLETADO"
 
 echo "----------------------------"
 echo "Todos los recursos han sido eliminados."
+
+echo "----------------------------"
+cd "../"
+echo "Regresando  al directorio principal..."
