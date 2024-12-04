@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directorio donde se encuentran los scripts
-SCRIPT_DIR="./deploy/scripts"
+SCRIPT_DIR="./scripts"
 
 # Lista de los scripts de eliminación
 scripts=("remove-prod.sh" "remove-test.sh" "remove-dev.sh")
