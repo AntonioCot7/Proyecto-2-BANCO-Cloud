@@ -35,17 +35,17 @@ cd "$SCRIPT_DIR"
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-dev.sh..."
 ./remove-dev.sh
-echo "DEPLOY STAGE DEV COMPLETADO"
+echo "REMOVE STAGE DEV COMPLETADO"
 
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-prod.sh..."
 ./remove-prod.sh
-echo "DEPLOY STAGE PROD COMPLETADO"
+echo "REMOVE STAGE PROD COMPLETADO"
 
 echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-test.sh..."
 ./remove-test.sh
-echo "DEPLOY STAGE TEST COMPLETADO"
+echo "REMOVE STAGE TEST COMPLETADO"
 
 echo "----------------------------"
 echo "Todos los recursos han sido eliminados."
