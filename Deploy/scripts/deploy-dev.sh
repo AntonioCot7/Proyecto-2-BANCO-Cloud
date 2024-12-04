@@ -9,6 +9,9 @@ services=(TABLA-CUENTA TABLA-PAGOS TABLA-PRESTAMOS TABLA-SOLICITUD-PRESTAMO TABL
 # Directorio base donde están las carpetas de las tablas
 BASE_DIR="../../"  # Ajusta este valor si la estructura es diferente
 
+# Guardar el directorio de inicio (Deploy/scripts) para regresar allí después de cada despliegue
+START_DIR="$(pwd)"
+
 for service in "${services[@]}"
 do
   echo "Deploying $service to stage $STAGE..."
@@ -42,7 +45,7 @@ do
   # Ejecutar deploy para el stage especificado
   npx serverless deploy --stage $STAGE || { echo "Error: El despliegue de $service falló."; exit 1; }
 
-  # Volver al directorio base
-  cd Deploy/scripts || { echo "Error: No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
+  # Volver al directorio base (Deploy/scripts) después de cada despliegue
+  cd "$START_DIR" || { echo "Error: No se pudo regresar al directorio base $START_DIR"; exit 1; }
 
 done
