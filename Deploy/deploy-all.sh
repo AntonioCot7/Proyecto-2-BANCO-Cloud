@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directorio donde se encuentran los scripts
-SCRIPT_DIR="./scripts"
+SCRIPT_DIR="$(pwd)/scripts"
 
 # Lista de los scripts de despliegue
 scripts=("deploy-dev.sh" "deploy-prod.sh" "deploy-test.sh")

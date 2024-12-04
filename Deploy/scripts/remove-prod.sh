@@ -9,6 +9,9 @@ services=(TABLA-CUENTA TABLA-PAGOS TABLA-PRESTAMOS TABLA-SOLICITUD-PRESTAMO TABL
 # Directorio base donde están las carpetas de las tablas
 BASE_DIR="../../"  # Ajusta este valor si la estructura es diferente
 
+# Guardar el directorio de inicio (Deploy/scripts) para regresar allí después de cada despliegue
+START_DIR="$(pwd)"
+
 # Función para verificar si un directorio existe
 check_directory() {
   if [ ! -d "$1" ]; then
@@ -32,8 +35,8 @@ do
   echo "Ejecutando: npx serverless remove --stage $STAGE"
   npx serverless remove --stage "$STAGE" || { echo "Error al ejecutar 'serverless remove' para $service"; exit 1; }
 
-  # Volver al directorio base (un nivel hacia atrás)
-  cd "Deploy/scripts" || { echo "No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
+  # Volver al directorio base (Deploy/scripts) después de cada despliegue
+  cd "$START_DIR" || { echo "Error: No se pudo regresar al directorio base $START_DIR"; exit 1; }
 
 done
 
