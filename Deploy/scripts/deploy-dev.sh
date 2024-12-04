@@ -43,6 +43,6 @@ do
   npx serverless deploy --stage $STAGE || { echo "Error: El despliegue de $service falló."; exit 1; }
 
   # Volver al directorio base
-  cd "Deploy/scripts" || { echo "Error: No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
+  cd Deploy/scripts || { echo "Error: No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
 
 done
