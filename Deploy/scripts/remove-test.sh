@@ -35,7 +35,7 @@ do
   npx serverless remove --stage "$STAGE" || { echo "Error al ejecutar 'serverless remove' para $service"; exit 1; }
 
   # Volver al directorio base después de la eliminación
-  cd "$BASE_DIR" || { echo "No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
+  cd "Deploy/scripts" || { echo "No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
 
 done
 
