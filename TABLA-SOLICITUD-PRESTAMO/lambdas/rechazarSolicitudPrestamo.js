@@ -25,10 +25,10 @@ exports.lambdaHandler = async (event) => {
     if (!usuario_id || !solicitud_id) {
       return {
         statusCode: 400,
-        body: JSON.stringify({
+        body: {
           error: 'Solicitud inválida',
           details: 'Los campos usuario_id y solicitud_id son obligatorios',
-        }),
+        },
       };
     }
 
@@ -45,7 +45,7 @@ exports.lambdaHandler = async (event) => {
     if (!solicitud) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ error: 'Solicitud no encontrada' }),
+        body: { error: 'Solicitud no encontrada' },
       };
     }
 

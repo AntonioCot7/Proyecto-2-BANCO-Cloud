@@ -70,10 +70,10 @@ exports.lambdaHandler = async (event) => {
     console.error(`Error: ${error.message}`);
     return {
       statusCode: 500,
-      body: JSON.stringify({
+      body: {
         error: 'Error interno al crear el préstamo',
         details: error.message,
-      }),
+      },
     };
   }
 };
