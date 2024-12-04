@@ -27,14 +27,22 @@ check_and_chmod() {
 # Llamar a la función para verificar los permisos
 check_and_chmod
 
+
 # Ejecutar los tres scripts de eliminación
-echo "Ejecutando $SCRIPT_DIR/remove-prod.sh..."
-$SCRIPT_DIR/remove-prod.sh
-
-echo "Ejecutando $SCRIPT_DIR/remove-test.sh..."
-$SCRIPT_DIR/remove-test.sh
-
+echo "----------------------------"
 echo "Ejecutando $SCRIPT_DIR/remove-dev.sh..."
 $SCRIPT_DIR/remove-dev.sh
+echo "REMOVE STAGE DEV COMPLETADO"
 
+echo "----------------------------"
+echo "Ejecutando $SCRIPT_DIR/remove-prod.sh..."
+$SCRIPT_DIR/remove-prod.sh
+echo "REMOVE STAGE PROD COMPLETADO"
+
+echo "----------------------------"
+echo "Ejecutando $SCRIPT_DIR/remove-test.sh..."
+$SCRIPT_DIR/remove-test.sh
+echo "REMOVE STAGE TEST COMPLETADO"
+
+echo "----------------------------"
 echo "Todos los recursos han sido eliminados."
