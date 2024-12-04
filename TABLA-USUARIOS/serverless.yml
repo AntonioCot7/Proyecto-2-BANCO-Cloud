@@ -11,11 +11,13 @@ provider:
   region: us-east-1
   profile: default
   environment:
-    TABLE_NAME: TABLA-USUARIOS
+    USUARIOS_TABLE: TABLA-USUARIOS-${sls:stage}
+    TOKENS_TABLE: TABLA-TOKENS_ACCESO-${sls:stage}
+    GSI: ${sls:stage}-usuarios-email-index_at-index
 
 functions:
   CrearUsuario:
-    handler: CrearUsuario.lambda_handler
+    handler: lambdas/CrearUsuario.lambda_handler
     events:
       - http:
           path: /usuarios/crear
@@ -24,7 +26,7 @@ functions:
           integration: lambda
 
   ListarUsuarios:
-    handler: ListarUsuarios.lambda_handler
+    handler: lambdas/ListarUsuarios.lambda_handler
     events:
       - http:
           path: /usuarios/listar
@@ -33,7 +35,7 @@ functions:
           integration: lambda
 
   BuscarUsuario:
-    handler: BuscarUsuario.lambda_handler
+    handler: lambdas/BuscarUsuario.lambda_handler
     events:
       - http:
           path: /usuarios/buscar
@@ -42,7 +44,7 @@ functions:
           integration: lambda
 
   EliminarUsuario:
-    handler: EliminarUsuario.lambda_handler
+    handler: lambdas/EliminarUsuario.lambda_handler
     events:
       - http:
           path: /usuarios/eliminar
@@ -51,7 +53,7 @@ functions:
           integration: lambda
 
   ModificarUsuario:
-    handler: ModificarUsuario.lambda_handler
+    handler: lambdas/ModificarUsuario.lambda_handler
     events:
       - http:
           path: /usuarios/modificar
@@ -60,7 +62,7 @@ functions:
           integration: lambda
 
   LoginUsuario:
-    handler: LoginUsuario.lambda_handler
+    handler: lambdas/LoginUsuario.lambda_handler
     events:
       - http:
           path: /usuarios/login
@@ -73,7 +75,7 @@ resources:
     UsuariosTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: ${self:provider.environment.USUARIOS_TABLE}
         AttributeDefinitions:
           - AttributeName: usuario_id
             AttributeType: S
@@ -86,7 +88,7 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: email-index
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: email
                 KeyType: HASH

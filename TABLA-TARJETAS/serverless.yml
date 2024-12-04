@@ -9,11 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    TABLE_NAME: TABLA-TARJETAS
+    TARJETAS_TABLE: TABLA-TARJETAS-${sls:stage}
+    CUENTAS_TABLE: TABLA-CUENTAS-${sls:stage}
+    USUARIOS_TABLE: TABLA-USUARIOS-${sls:stage}
+    GSI: ${sls:stage}-tarjetas-IdIndex_at-index
 
 functions:
   CrearTarjeta:
-    handler: CrearTarjeta.lambda_handler
+    handler: lambdas/CrearTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/crear
@@ -21,7 +24,7 @@ functions:
           cors: true
           integration: lambda
   ListarTarjetas:
-    handler: ListarTarjetas.lambda_handler
+    handler: lambdas/ListarTarjetas.lambda_handler
     events:
       - http:
           path: /tarjetas/listar
@@ -29,7 +32,7 @@ functions:
           cors: true
           integration: lambda
   BuscarTarjeta:
-    handler: BuscarTarjeta.lambda_handler
+    handler: lambdas/BuscarTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/buscar
@@ -37,7 +40,7 @@ functions:
           cors: true
           integration: lambda
   ModificarTarjeta:
-    handler: ModificarTarjeta.lambda_handler
+    handler: lambdas/ModificarTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/modificar
@@ -45,7 +48,7 @@ functions:
           cors: true
           integration: lambda
   EliminarTarjeta:
-    handler: EliminarTarjeta.lambda_handler
+    handler: lambdas/EliminarTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/eliminar
@@ -53,7 +56,7 @@ functions:
           cors: true
           integration: lambda
   RecargarTarjeta:
-    handler: RecargarTarjeta.lambda_handler
+    handler: lambdas/RecargarTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/recargar
@@ -61,7 +64,7 @@ functions:
           cors: true
           integration: lambda
   RetirarTarjeta:
-    handler: RetirarTarjeta.lambda_handler
+    handler: lambdas/RetirarTarjeta.lambda_handler
     events:
       - http:
           path: /tarjetas/retirar
@@ -74,7 +77,7 @@ resources:
     TarjetasTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: ${self:provider.environment.TARJETAS_TABLE}
         AttributeDefinitions:
           - AttributeName: cuenta_id
             AttributeType: S
@@ -89,10 +92,9 @@ resources:
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true        
         GlobalSecondaryIndexes:
-          - IndexName: tarjeta_id-index
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: tarjeta_id
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
-

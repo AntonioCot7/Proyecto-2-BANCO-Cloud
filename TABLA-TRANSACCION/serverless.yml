@@ -9,11 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    TRANSACTION_TABLE: TABLA-TRANSACCION
+    TRANSACTION_TABLE: TABLA-TRANSACCION-${sls:stage}
+    CUENTAS_TABLE: TABLA-CUENTAS-${sls:stage}
+    GSI: ${sls:stage}-transacciones-CuentaDestinoIndex_at-index
+    LSI: ${sls:stage}-transacciones-MontoIndex-index    
 
 functions:
   CrearTransaccion:
-    handler: CrearTransaccion.lambda_handler
+    handler: lambdas/CrearTransaccion.lambda_handler
     events:
       - http:
           path: /transaccion/crear
@@ -22,7 +25,7 @@ functions:
           integration: lambda
 
   EliminarTransaccion:
-    handler: EliminarTransaccion.lambda_handler
+    handler: lambdas/EliminarTransaccion.lambda_handler
     events:
       - http:
           path: /transaccion/eliminar
@@ -31,7 +34,7 @@ functions:
           integration: lambda
 
   ObtenerTransaccion:
-    handler: ObtenerTransaccion.lambda_handler
+    handler: lambdas/ObtenerTransaccion.lambda_handler
     events:
       - http:
           path: /transaccion/obtener
@@ -40,7 +43,7 @@ functions:
           integration: lambda
 
   ListarTransacciones:
-    handler: ListarTransacciones.lambda_handler
+    handler: lambdas/ListarTransacciones.lambda_handler
     events:
       - http:
           path: /transaccion/listar
@@ -70,14 +73,14 @@ resources:
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         GlobalSecondaryIndexes:
-          - IndexName: CuentaDestinoIndex
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: cuenta_destino
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
         LocalSecondaryIndexes:
-          - IndexName: MontoIndex
+          - IndexName: ${self:provider.environment.LSI}
             KeySchema:
               - AttributeName: cuenta_origen
                 KeyType: HASH
@@ -87,4 +90,3 @@ resources:
               ProjectionType: ALL
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true
-

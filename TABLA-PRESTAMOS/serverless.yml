@@ -9,13 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    PRESTAMOS_TABLE: TABLA-PRESTAMOS
-    CUENTAS_TABLE: TABLA-CUENTAS
-    PAGOS_TABLE: TABLA-PAGOS
+    PRESTAMOS_TABLE: TABLA-PRESTAMOS-${sls:stage}
+    CUENTAS_TABLE: TABLA-CUENTAS-${sls:stage}
+    PAGOS_TABLE: TABLA-PAGOS-${sls:stage}	
+    GSI: ${sls:stage}-prestamos-EstadoIndex_at-index
 
 functions:
   crearPrestamo:
-    handler: crearPrestamo.lambdaHandler
+    handler: lambdas/crearPrestamo.lambdaHandler
     events:
       - http:
           path: /prestamo/crear
@@ -24,7 +25,7 @@ functions:
           integration: lambda
           
   obtenerPrestamo:
-    handler: obtenerPrestamo.lambdaHandler
+    handler: lambdas/obtenerPrestamo.lambdaHandler
     events:
       - http:
           path: /prestamo/obtener
@@ -33,7 +34,7 @@ functions:
           integration: lambda
           
   actualizarEstadoPrestamo:
-    handler: actualizarEstadoPrestamo.lambdaHandler
+    handler: lambdas/actualizarEstadoPrestamo.lambdaHandler
     events:
       - http:
           path: /prestamo/actualizar-estado
@@ -42,7 +43,7 @@ functions:
           integration: lambda
           
   listarPrestamobyID:
-    handler: listarPrestamoPorUsuario.lambdaHandler
+    handler: lambdas/listarPrestamoPorUsuario.lambdaHandler
     events:
       - http:
           path: /prestamo/listar-usuario
@@ -51,7 +52,7 @@ functions:
           integration: lambda
           
   eliminarPrestamo:
-    handler: eliminarPrestamo.lambdaHandler
+    handler: lambdas/eliminarPrestamo.lambdaHandler
     events:
       - http:
           path: /prestamo/eliminar
@@ -81,7 +82,7 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES # Activando streams para eventos
         GlobalSecondaryIndexes:
-          - IndexName: EstadoIndex
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: usuario_id
                 KeyType: HASH

@@ -1,6 +1,7 @@
 import boto3
 from datetime import datetime
 import json
+import os
 
 def lambda_handler(event, context):
     body = event.get('body')
@@ -18,7 +19,7 @@ def lambda_handler(event, context):
         return {'statusCode': 400, 'body': 'Solicitud inválida. Falta el campo "token".'}
     
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('TABLA-TOKENS_ACCESO')
+    table = dynamodb(os.environ.get('TOKENS_TABLE'))
 
     response = table.get_item(Key={'token': token})
 

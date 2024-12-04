@@ -9,11 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    TABLE_NAME: TABLA-CUENTA
+    TABLE_CUENTA: TABLA-CUENTA-${sls:stage}
+    TABLE_USUARIOS: TABLA-USUARIOS-${sls:stage}
+    GSI: ${sls:stage}-cuenta-created_at-index
+    LSI: ${sls:stage}-cuenta-index
 
 functions:
   CrearCuenta:
-    handler: CrearCuenta.lambda_handler
+    handler: lambdas/CrearCuenta.lambda_handler
     events:
       - http:
           path: /cuentas/crear
@@ -22,7 +25,7 @@ functions:
           integration: lambda
 
   ListarCuentas:
-    handler: ListarCuentas.lambda_handler
+    handler: lambdas/ListarCuentas.lambda_handler
     events:
       - http:
           path: /cuentas/listar
@@ -31,7 +34,7 @@ functions:
           integration: lambda
 
   BuscarCuenta:
-    handler: BuscarCuenta.lambda_handler
+    handler: lambdas/BuscarCuenta.lambda_handler
     events:
       - http:
           path: /cuentas/buscar
@@ -40,7 +43,7 @@ functions:
           integration: lambda
 
   EliminarCuenta:
-    handler: EliminarCuenta.lambda_handler
+    handler: lambdas/EliminarCuenta.lambda_handler
     events:
       - http:
           path: /cuentas/eliminar
@@ -49,7 +52,7 @@ functions:
           integration: lambda
 
   ModificarCuenta:
-    handler: ModificarCuenta.lambda_handler
+    handler: lambdas/ModificarCuenta.lambda_handler
     events:
       - http:
           path: /cuentas/modificar
@@ -58,7 +61,7 @@ functions:
           integration: lambda
 
   AgregarSaldoCuenta:
-    handler: agregarSaldoCuenta.lambda_handler
+    handler: lambdas/agregarSaldoCuenta.lambda_handler
     events:
       - http: # El problema era aquí; faltaba el array para "events"
           path: /cuentas/agregar-saldo
@@ -71,7 +74,7 @@ resources:
     CuentasTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.TABLE_NAME}
+        TableName: ${self:provider.environment.TABLE_CUENTA}
         AttributeDefinitions:
           - AttributeName: usuario_id
             AttributeType: S

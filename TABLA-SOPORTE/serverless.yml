@@ -9,11 +9,12 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    SOPORTE_TABLE: TABLA-SOPORTE
+    SOPORTE_TABLE: TABLA-SOPORTE-${sls:stage}
+    GSI: ${sls:stage}-soporte-EstadoIndex_at-index
 
 functions:
   CrearSolicitud:
-    handler: CrearSolicitud.lambda_handler  # Cambiar el manejador de Python a Node.js
+    handler: lambdas/CrearSolicitud.lambda_handler  # Cambiar el manejador de Python a Node.js
     events:
       - http:
           path: /soporte/crear
@@ -22,7 +23,7 @@ functions:
           integration: lambda
 
   EliminarSolicitud:
-    handler: EliminarSolicitud.lambda_handler  # Actualizar para usar código Node.js
+    handler: lambdas/EliminarSolicitud.lambda_handler  # Actualizar para usar código Node.js
     events:
       - http:
           path: /soporte/eliminar
@@ -31,7 +32,7 @@ functions:
           integration: lambda
 
   EditarSolicitud:
-    handler: EditarSolicitud.lambda_handler  # Lo mismo aquí
+    handler: lambdas/EditarSolicitud.lambda_handler  # Lo mismo aquí
     events:
       - http:
           path: /soporte/editar
@@ -40,7 +41,7 @@ functions:
           integration: lambda
 
   ObtenerSolicitud:
-    handler: ObtenerSolicitud.lambda_handler  # Actualizar manejador
+    handler: lambdas/ObtenerSolicitud.lambda_handler  # Actualizar manejador
     events:
       - http:
           path: /soporte/obtener
@@ -49,7 +50,7 @@ functions:
           integration: lambda
 
   ListarSolicitudes:
-    handler: ListarSolicitudes.lambda_handler  # Cambiar a Node.js
+    handler: lambdas/ListarSolicitudes.lambda_handler  # Cambiar a Node.js
     events:
       - http:
           path: /soporte/listar
@@ -58,7 +59,7 @@ functions:
           integration: lambda
 
   ListarSolicitudesPorUsuario:
-    handler: ListarSolicitudesPorUsuario.lambda_handler  # Actualizar para Node.js
+    handler: lambdas/ListarSolicitudesPorUsuario.lambda_handler  # Actualizar para Node.js
     events:
       - http:
           path: /soporte/listar-usuario
@@ -67,7 +68,7 @@ functions:
           integration: lambda
 
   ResponderSolicitud:
-    handler: ResponderSolicitud.lambda_handler  # Cambiar a Node.js
+    handler: lambdas/ResponderSolicitud.lambda_handler  # Cambiar a Node.js
     events:
       - http:
           path: /soporte/responder
@@ -99,7 +100,7 @@ resources:
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true        
         GlobalSecondaryIndexes:
-          - IndexName: estado-index
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: estado
                 KeyType: HASH

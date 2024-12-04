@@ -9,11 +9,12 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    SOLICITUD_PRESTAMO_TABLE: TABLA-SOLICITUD-PRESTAMO
-
+    SOLICITUD_PRESTAMO_TABLE: TABLA-SOLICITUD-PRESTAMO-${sls:stage}
+    GSI: ${sls:stage}-pagos-SolPrest-EstadoIndex_at-index
+	
 functions:
   crearSolicitudPrestamo:
-    handler: crearSolicitudPrestamo.lambdaHandler
+    handler: lambdas/crearSolicitudPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/crear
@@ -22,7 +23,7 @@ functions:
           integration: lambda
           
   listarSolicitudesPrestamo:
-    handler: listarSolicitudesPrestamo.lambdaHandler
+    handler: lambdas/listarSolicitudesPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/listar
@@ -31,7 +32,7 @@ functions:
           integration: lambda
           
   aceptarSolicitudPrestamo:
-    handler: aceptarSolicitudPrestamo.lambdaHandler
+    handler: lambdas/aceptarSolicitudPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/aceptar
@@ -40,7 +41,7 @@ functions:
           integration: lambda
           
   rechazarSolicitudPrestamo:
-    handler: rechazarSolicitudPrestamo.lambdaHandler
+    handler: lambdas/rechazarSolicitudPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/rechazar
@@ -48,7 +49,7 @@ functions:
           cors: true
 
   obtenerSolicitudPrestamo:
-    handler: obtenerSolicitudPrestamo.lambdaHandler
+    handler: lambdas/obtenerSolicitudPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/obtener
@@ -57,7 +58,7 @@ functions:
           integration: lambda
           
   listarPorEstado:
-    handler: filtrarPorEstado.lambdaHandler
+    handler: lambdas/filtrarPorEstado.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/listar-estado
@@ -66,7 +67,7 @@ functions:
           integration: lambda
           
   eliminarSolicitudPrestamo:
-    handler: eliminarSolicitudPrestamo.lambdaHandler
+    handler: lambdas/eliminarSolicitudPrestamo.lambdaHandler
     events:
       - http:
           path: /solicitud-prestamo/eliminar
@@ -96,7 +97,7 @@ resources:
         PointInTimeRecoverySpecification:
           PointInTimeRecoveryEnabled: true        
         GlobalSecondaryIndexes:
-          - IndexName: EstadoIndex
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: estado
                 KeyType: HASH

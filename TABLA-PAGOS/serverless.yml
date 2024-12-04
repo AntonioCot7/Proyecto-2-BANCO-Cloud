@@ -9,11 +9,14 @@ provider:
   iam:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
-    PAGOS_TABLE: TABLA-PAGOS
-    
+    PAGOS_TABLE: TABLA-PAGOS-${sls:stage}
+    TAJETAS_TABLE: TABLA-TAJETAS-${sls:stage}
+    GSI: ${sls:stage}-pagos-created_at-index
+    LSI: ${sls:stage}-pagos-index    
+
 functions:
   CrearPagoDeuda:
-    handler: CrearPagoDeuda.lambda_handler
+    handler: lambdas/CrearPagoDeuda.lambda_handler
     events:
       - http:
           path: /pago/deuda
@@ -22,7 +25,7 @@ functions:
           integration: lambda
 
   CrearPagoServicio:
-    handler: CrearPagoServicio.lambda_handler
+    handler: lambdas/CrearPagoServicio.lambda_handler
     events:
       - http:
           path: /pago/servicio
@@ -31,7 +34,7 @@ functions:
           integration: lambda
 
   RealizarPago:
-    handler: RealizarPago.lambda_handler
+    handler: lambdas/RealizarPago.lambda_handler
     events:
       - http:
           path: /pago/realizar
@@ -40,7 +43,7 @@ functions:
           integration: lambda
 
   ObtenerPago:
-    handler: ObtenerPago.lambda_handler
+    handler: lambdas/ObtenerPago.lambda_handler
     events:
       - http:
           path: /pago/obtener
@@ -49,7 +52,7 @@ functions:
           integration: lambda
 
   ListarPagos:
-    handler: ListarPagos.lambda_handler
+    handler: lambdas/ListarPagos.lambda_handler
     events:
       - http:
           path: /pago/listar
@@ -58,7 +61,7 @@ functions:
           integration: lambda
           
   ActualizarPago:
-    handler: ActualizarPago.lambda_handler
+    handler: lambdas/ActualizarPago.lambda_handler
     events:
       - http:
           path: /pago/actualizar
@@ -67,7 +70,7 @@ functions:
           integration: lambda
 
   EliminarPago:
-    handler: EliminarPago.lambda_handler
+    handler: lambdas/EliminarPago.lambda_handler
     events:
       - http:
           path: /pago/eliminar
@@ -97,7 +100,7 @@ resources:
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
         GlobalSecondaryIndexes:
-          - IndexName: TipoIndex
+          - IndexName: ${self:provider.environment.GSI}
             KeySchema:
               - AttributeName: usuario_id
                 KeyType: HASH
@@ -106,7 +109,7 @@ resources:
             Projection:
               ProjectionType: ALL
         LocalSecondaryIndexes:
-          - IndexName: FechaIndex
+          - IndexName: ${self:provider.environment.LSI}
             KeySchema:
               - AttributeName: usuario_id  # Mismo HASH que la tabla
                 KeyType: HASH
