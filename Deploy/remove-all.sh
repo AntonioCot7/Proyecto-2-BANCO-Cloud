@@ -4,7 +4,7 @@
 SCRIPT_DIR="./scripts"
 
 # Lista de los scripts de eliminación
-scripts=("remove-prod.sh" "remove-test.sh" "remove-dev.sh")
+scripts=("remove-dev.sh" "remove-prod.sh" "remove-test.sh")
 
 # Función para verificar y aplicar chmod
 check_and_chmod() {

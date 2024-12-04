@@ -6,16 +6,35 @@ STAGE="${1:-dev}"
 # Lista de servicios (las tablas)
 services=(TABLA-CUENTA TABLA-PAGOS TABLA-PRESTAMOS TABLA-SOLICITUD-PRESTAMO TABLA-SOPORTE TABLA-TARJETAS TABLA-TOKENS_ACCESO TABLA-TRANSACCION TABLA-USUARIOS)
 
+# Directorio base donde están las carpetas de los servicios
+BASE_DIR="../../"  # Ajusta este valor si la estructura es diferente
+
+# Función para verificar si un directorio existe
+check_directory() {
+  if [ ! -d "$1" ]; then
+    echo "Error: El directorio $1 no existe. Abortando."
+    exit 1
+  fi
+}
+
 for service in "${services[@]}"
 do
   echo "Removing resources for $service in stage $STAGE..."
 
+  # Construir la ruta del directorio del servicio
+  SERVICE_DIR="$BASE_DIR$service"
+  check_directory "$SERVICE_DIR"  # Verificar si el directorio existe
+
   # Cambiar al directorio del servicio
-  cd "../$service"  # Retroceder un nivel y entrar a la carpeta del servicio
+  cd "$SERVICE_DIR" || { echo "No se pudo cambiar al directorio $SERVICE_DIR"; exit 1; }
 
   # Eliminar recursos usando Serverless para el stage especificado
-  npx serverless remove --stage $STAGE
+  echo "Ejecutando: npx serverless remove --stage $STAGE"
+  npx serverless remove --stage "$STAGE" || { echo "Error al ejecutar 'serverless remove' para $service"; exit 1; }
 
-  # Volver al directorio de "deploy" después de cada eliminación
-  cd "../deploy"
+  # Volver al directorio base
+  cd "$BASE_DIR" || { echo "No se pudo regresar al directorio base $BASE_DIR"; exit 1; }
+
 done
+
+echo "Todos los recursos han sido eliminados correctamente para el stage $STAGE."

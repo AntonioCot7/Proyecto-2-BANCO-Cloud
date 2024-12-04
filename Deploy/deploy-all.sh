@@ -4,7 +4,7 @@
 SCRIPT_DIR="./scripts"
 
 # Lista de los scripts de despliegue
-scripts=("deploy-prod.sh" "deploy-test.sh" "deploy-dev.sh")
+scripts=("deploy-dev.sh" "deploy-prod.sh" "deploy-test.sh")
 
 # Función para verificar y aplicar chmod
 check_and_chmod() {
