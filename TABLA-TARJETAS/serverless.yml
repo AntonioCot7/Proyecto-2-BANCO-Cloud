@@ -10,9 +10,9 @@ provider:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
     TARJETAS_TABLE: TABLA-TARJETAS-${sls:stage}
-    CUENTAS_TABLE: TABLA-CUENTAS-${sls:stage}
+    CUENTAS_TABLE: TABLA-CUENTA-${sls:stage}
     USUARIOS_TABLE: TABLA-USUARIOS-${sls:stage}
-    GSI: ${sls:stage}-tarjetas-IdIndex_at-index
+    GSI: ${sls:stage}-tarjetas-index
 
 functions:
   CrearTarjeta:

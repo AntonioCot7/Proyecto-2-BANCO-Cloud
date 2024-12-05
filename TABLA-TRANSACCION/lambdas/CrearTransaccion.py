@@ -2,6 +2,7 @@ import boto3
 import uuid
 from datetime import datetime
 import os
+import json
 
 # Inicializar DynamoDB
 dynamodb = boto3.resource('dynamodb')
@@ -9,7 +10,7 @@ dynamodb = boto3.resource('dynamodb')
 def lambda_handler(event, context):
     try:
         # Convertir el cuerpo del evento en un diccionario
-        data = eval(event['body']) if isinstance(event['body'], str) else event['body']
+        data = json.loads(event['body']) if isinstance(event['body'], str) else event['body']
         
         usuario_origen = data['usuario_origen']
         cuenta_origen = data['cuenta_origen']
@@ -20,8 +21,8 @@ def lambda_handler(event, context):
         transaccion_id = str(uuid.uuid4())
         
         # Tablas de DynamoDB
-        transaccion_table = dynamodb.Table(os.environ.get('TRANSACTION_TABLE'))
-        cuenta_table = dynamodb.Table(os.environ.get('CUENTAS_TABLE'))
+        transaccion_table = dynamodb.Table(os.environ['TRANSACTION_TABLE'])
+        cuenta_table = dynamodb.Table(os.environ['CUENTAS_TABLE'])
 
         # Validar que las cuentas existan
         cuenta_origen_data = cuenta_table.get_item(Key={'usuario_id': usuario_origen, 'cuenta_id': cuenta_origen})

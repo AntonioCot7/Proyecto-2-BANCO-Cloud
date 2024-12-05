@@ -30,10 +30,10 @@ def lambda_handler(event, context):
         if not usuario_id or not cuenta_id:
             return {
                 'statusCode': 400,
-                'body': json.dumps({
+                'body': {
                     'error': 'Solicitud inválida',
                     'details': 'El usuario_id y cuenta_id son obligatorios'
-                })
+                }
             }
 
         # Inicializar DynamoDB
@@ -46,10 +46,10 @@ def lambda_handler(event, context):
         if 'Item' not in cuenta_response:
             return {
                 'statusCode': 404,
-                'body': json.dumps({
+                'body': {
                     'error': 'Cuenta no encontrada',
                     'details': f'No se encontró la cuenta con usuario_id {usuario_id} y cuenta_id {cuenta_id}'
-                })
+                }
             }
 
         # Consultar tarjetas relacionadas con la cuenta y usuario
@@ -77,5 +77,5 @@ def lambda_handler(event, context):
         print(f"Error: {str(e)}")
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': 'Error interno del servidor', 'details': str(e)})
+            'body': {'error': 'Error interno del servidor', 'details': str(e)}
         }

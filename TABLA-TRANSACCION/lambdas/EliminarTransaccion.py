@@ -5,7 +5,7 @@ import os
 dynamodb = boto3.resource('dynamodb')
 
 def lambda_handler(event, context):
-    data = json.loads(event['body'])
+    data = event['body']
     cuenta_origen = data['cuenta_origen']
     transaccion_id = data['transaccion_id']
     
@@ -21,11 +21,11 @@ def lambda_handler(event, context):
         
         return {
             'statusCode': 200,
-            'body': json.dumps({'message': f'Transacción {transaccion_id} eliminada con éxito'})
+            'body': {'message': f'Transacción {transaccion_id} eliminada con éxito'}
         }
     
     except Exception as e:
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': f'Error al eliminar la transacción: {str(e)}'})
+            'body': {'error': f'Error al eliminar la transacción: {str(e)}'}
         }

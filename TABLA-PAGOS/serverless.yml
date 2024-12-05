@@ -10,7 +10,7 @@ provider:
     role: arn:aws:iam::316129865556:role/LabRole
   environment:
     PAGOS_TABLE: TABLA-PAGOS-${sls:stage}
-    TAJETAS_TABLE: TABLA-TAJETAS-${sls:stage}
+    TARJETAS_TABLE: TABLA-TARJETAS-${sls:stage}
     GSI: ${sls:stage}-pagos-created_at-index
     LSI: ${sls:stage}-pagos-index    
 

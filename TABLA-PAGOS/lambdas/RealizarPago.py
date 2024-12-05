@@ -5,8 +5,8 @@ from datetime import datetime
 import os
 
 dynamodb = boto3.resource('dynamodb')
-pagos_table = dynamodb.Table(os.environ.get('PAGOS_TABLE'))
-tarjetas_table = dynamodb.Table(os.environ.get('TAJETAS_TABLE'))
+pagos_table = dynamodb.Table(os.environ['PAGOS_TABLE'])
+tarjetas_table = dynamodb.Table(os.environ['TARJETAS_TABLE'])
 
 def lambda_handler(event, context):
     try:
@@ -43,10 +43,10 @@ def lambda_handler(event, context):
         if 'Item' not in pago_response:
             return {
                 'statusCode': 404,
-                'body': json.dumps({
+                'body': {
                     'error': 'Pago no encontrado',
                     'details': f'El pago con ID {pago_id} no existe para el usuario {usuario_id}'
-                })
+                }
             }
 
         pago = pago_response['Item']

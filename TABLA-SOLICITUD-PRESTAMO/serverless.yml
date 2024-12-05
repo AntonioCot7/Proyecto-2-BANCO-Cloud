@@ -11,7 +11,7 @@ provider:
   environment:
     SOLICITUD_PRESTAMO_TABLE: TABLA-SOLICITUD-PRESTAMO-${sls:stage}
     GSI: ${sls:stage}-pagos-SolPrest-EstadoIndex_at-index
-	
+
 functions:
   crearSolicitudPrestamo:
     handler: lambdas/crearSolicitudPrestamo.lambdaHandler
@@ -38,7 +38,6 @@ functions:
           path: /solicitud-prestamo/aceptar
           method: post
           cors: true
-          integration: lambda
           
   rechazarSolicitudPrestamo:
     handler: lambdas/rechazarSolicitudPrestamo.lambdaHandler
@@ -74,7 +73,7 @@ functions:
           method: delete
           cors: true
           integration: lambda
-          
+
 resources:
   Resources:
     SolicitudPrestamoTable:

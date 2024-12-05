@@ -28,7 +28,7 @@ def lambda_handler(event, context):
         else:
             return {
                 'statusCode': 400,
-                'body': json.dumps({'error': 'Formato del cuerpo no soportado'})
+                'body': {'error': 'Formato del cuerpo no soportado'}
             }
 
         usuario_id = body.get('usuario_id')
@@ -39,7 +39,7 @@ def lambda_handler(event, context):
         if not usuario_id or not cuenta_id or monto is None:
             return {
                 'statusCode': 400,
-                'body': json.dumps({'error': 'Solicitud inválida. Se requiere usuario_id, cuenta_id y monto.'})
+                'body': {'error': 'Solicitud inválida. Se requiere usuario_id, cuenta_id y monto.'}
             }
 
         # Convertir monto a Decimal con redondeo explícito
@@ -48,7 +48,7 @@ def lambda_handler(event, context):
         except Exception as e:
             return {
                 'statusCode': 400,
-                'body': json.dumps({'error': f'El monto debe ser un número válido. Detalles: {str(e)}'})
+                'body': {'error': f'El monto debe ser un número válido. Detalles: {str(e)}'}
             }
 
         # Actualizar saldo en DynamoDB
@@ -68,7 +68,7 @@ def lambda_handler(event, context):
         except Exception as e:
             return {
                 'statusCode': 500,
-                'body': json.dumps({'error': f'Error en la actualización de DynamoDB: {str(e)}'})
+                'body': {'error': f'Error en la actualización de DynamoDB: {str(e)}'}
             }
 
         # Convertir valores de respuesta a JSON serializable
@@ -85,6 +85,6 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 500,
-            'body': json.dumps({'error': f'Error al actualizar el saldo: {str(e)}'})
+            'body': {'error': f'Error al actualizar el saldo: {str(e)}'}
         }
 

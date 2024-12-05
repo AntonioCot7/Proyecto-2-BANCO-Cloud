@@ -10,40 +10,38 @@ def generate_card_number():
     return '-'.join([''.join([str(random.randint(0, 9)) for _ in range(4)]) for _ in range(4)])
 
 def lambda_handler(event, context):
+    
+    body = event['body']
+    
     try:
         # Parsear el cuerpo de la solicitud
-        if isinstance(event['body'], str):
-            body = json.loads(event['body'])
-        else:
-            body = event['body']
-
         # Validar campos requeridos
         usuario_id = body.get('usuario_id')
         cuenta_id = body.get('cuenta_id')
         if not usuario_id or not cuenta_id:
             return {
                 'statusCode': 400,
-                'body': json.dumps({
+                'body': {
                     'error': 'Solicitud inválida',
                     'details': 'Se requieren los campos usuario_id y cuenta_id.'
-                })
+                }
             }
 
         # Inicializar recursos de DynamoDB
         dynamodb = boto3.resource('dynamodb')
-        usuarios_table = dynamodb.Table(os.environ.get(' USUARIOS_TABLE'))
-        cuentas_table = dynamodb.Table(os.environ.get('CUENTAS_TABLE'))
-        tarjetas_table = dynamodb.Table(os.environ.get('TARJETAS_TABLE'))
+        usuarios_table = dynamodb.Table(os.environ['USUARIOS_TABLE'])
+        cuentas_table = dynamodb.Table(os.environ['CUENTAS_TABLE'])
+        tarjetas_table = dynamodb.Table(os.environ['TARJETAS_TABLE'])
 
         # Verificar si el usuario existe
         user_response = usuarios_table.get_item(Key={'usuario_id': usuario_id})
         if 'Item' not in user_response:
             return {
                 'statusCode': 404,
-                'body': json.dumps({
+                'body': {
                     'error': 'Usuario no encontrado',
                     'details': f'El usuario con ID {usuario_id} no existe.'
-                })
+                }
             }
 
         # Verificar si la cuenta pertenece al usuario
@@ -51,17 +49,17 @@ def lambda_handler(event, context):
         if 'Item' not in cuenta_response:
             return {
                 'statusCode': 404,
-                'body': json.dumps({
+                'body': {
                     'error': 'Cuenta no encontrada',
                     'details': f'La cuenta con ID {cuenta_id} no pertenece al usuario {usuario_id}.'
-                })
+                }
             }
 
         # Generar un número único de tarjeta
         tarjeta_id = generate_card_number()
         while True:
             existing_card = tarjetas_table.query(
-                IndexName='tarjeta_id-index',
+                IndexName= os.environ.get('GSI'),
                 KeyConditionExpression=boto3.dynamodb.conditions.Key('tarjeta_id').eq(tarjeta_id)
             )
             if existing_card['Count'] == 0:
@@ -104,8 +102,8 @@ def lambda_handler(event, context):
         # Manejo de errores internos
         return {
             'statusCode': 500,
-            'body': json.dumps({
+            'body': {
                 'error': 'Error interno del servidor',
                 'details': str(e)
-            })
+            }
         }

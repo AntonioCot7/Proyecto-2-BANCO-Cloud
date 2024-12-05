@@ -1,66 +1,61 @@
 const AWS = require('aws-sdk');
 
-// Conexión a DynamoDB
+// Conexión con DynamoDB
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.SOLICITUD_PRESTAMO_TABLE;
 
 exports.lambdaHandler = async (event) => {
   try {
-    // Validar el cuerpo de la solicitud
+    // Parsear el cuerpo de la solicitud
     if (!event.body) {
       return {
         statusCode: 400,
         body: {
           error: 'Solicitud inválida',
-          details: 'No se encontró el cuerpo de la solicitud',
+          details: 'El cuerpo de la solicitud no está presente',
         },
       };
     }
 
     const data = typeof event.body === 'string' ? JSON.parse(event.body) : event.body;
-    const { estado } = data;
+    const { usuario_id } = data;
 
-    // Validar que el estado esté presente y sea válido
-    if (!estado || (estado !== 'aceptado' && estado !== 'rechazado')) {
+    if (!usuario_id) {
       return {
         statusCode: 400,
         body: {
           error: 'Solicitud inválida',
-          details: 'El estado debe ser "aceptado" o "rechazado"',
+          details: 'El campo usuario_id es obligatorio',
         },
       };
     }
 
-    // Escanear solicitudes según el estado
+    // Consulta a DynamoDB para obtener solicitudes por usuario_id
     const params = {
       TableName: TABLE_NAME,
-      FilterExpression: '#estado = :estado',
-      ExpressionAttributeNames: {
-        '#estado': 'estado', // Necesario si "estado" es una palabra reservada
-      },
+      KeyConditionExpression: 'usuario_id = :usuario_id',
       ExpressionAttributeValues: {
-        ':estado': estado,
+        ':usuario_id': usuario_id,
       },
     };
 
-    const response = await dynamodb.scan(params).promise();
-    const solicitudes = response.Items || [];
+    const response = await dynamodb.query(params).promise();
 
-    // Retornar las solicitudes encontradas
+    // Convertir el resultado a un formato JSON serializable
+    const items = response.Items || [];
+
     return {
       statusCode: 200,
       body: {
-        message: `Solicitudes con estado ${estado} encontradas`,
-        estado,
-        solicitudes,
+        items, // Los resultados ya están en formato adecuado para la respuesta
       },
     };
   } catch (error) {
-    console.error(`Error: ${error.message}`);
+    console.error('Error al listar las solicitudes de préstamo:', error);
     return {
       statusCode: 500,
       body: {
-        error: 'Error interno al procesar la solicitud',
+        error: 'Error al listar las solicitudes de préstamo',
         details: error.message,
       },
     };

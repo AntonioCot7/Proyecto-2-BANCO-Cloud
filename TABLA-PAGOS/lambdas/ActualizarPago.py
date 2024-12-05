@@ -6,7 +6,7 @@ import os
 
 # Inicializar DynamoDB
 dynamodb = boto3.resource('dynamodb')
-pagos_table = dynamodb.Table(os.environ.get('PAGOS_TABLE'))
+pagos_table = dynamodb.Table(os.environ['PAGOS_TABLE'])
 
 def lambda_handler(event, context):
     try:
@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         if 'Item' not in response:
             return {
                 'statusCode': 404,
-                'body': json.dumps({'error': 'Pago no encontrado'})
+                'body': {'error': 'Pago no encontrado'}
             }
 
         # Obtener el estado actual del pago
