@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         return {'statusCode': 400, 'body': 'Solicitud inválida. Falta el campo "token".'}
     
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('TOKENS_TABLE'))
+    table = dynamodb.Table(os.environ.get('TOKENS_TABLE'))
 
     response = table.get_item(Key={'token': token})
 

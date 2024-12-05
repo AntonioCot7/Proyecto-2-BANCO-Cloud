@@ -25,7 +25,7 @@ def lambda_handler(event, context):
         }
 
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('TABLE_CUENTA'))
+    table = dynamodb.Table(os.environ.get('TABLE_CUENTA'))
     try:
         existing_account = table.get_item(
             Key={

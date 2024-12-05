@@ -29,7 +29,7 @@ def lambda_handler(event, context):
         }
 
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('USUARIOS_TABLE'))
+    table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
 
     if 'email' in updated_data:
         email_response = table.query(

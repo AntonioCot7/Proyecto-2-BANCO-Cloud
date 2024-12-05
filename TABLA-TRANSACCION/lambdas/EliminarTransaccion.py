@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     cuenta_origen = data['cuenta_origen']
     transaccion_id = data['transaccion_id']
     
-    transaccion_table = dynamodb(os.environ.get('TRANSACTION_TABLE'))
+    transaccion_table = dynamodb.Table(os.environ.get('TRANSACTION_TABLE'))
     
     try:
         transaccion_table.delete_item(

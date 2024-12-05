@@ -6,7 +6,7 @@ import os
 
 # Obtener referencia a la tabla DynamoDB usando la variable de entorno
 dynamodb = boto3.resource('dynamodb')
-pagos_table = dynamodb(os.environ.get('PAGOS_TABLE'))
+pagos_table = dynamodb.Table(os.environ.get('PAGOS_TABLE'))
 
 def lambda_handler(event, context):
     try:

@@ -23,8 +23,8 @@ def get_next_user_id(table):
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    usuarios_table = dynamodb(os.environ.get('USUARIOS_TABLE'))
-    tokens_table = dynamodb(os.environ.get('TOKENS_TABLE'))
+    usuarios_table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
+    tokens_table = dynamodb.Table(os.environ.get('TOKENS_TABLE'))
 
     if isinstance(event.get('body'), str):
         try:

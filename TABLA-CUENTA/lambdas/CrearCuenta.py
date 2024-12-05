@@ -12,8 +12,8 @@ def lambda_handler(event, context):
     cuenta_datos = body['cuenta_datos']
 
     dynamodb = boto3.resource('dynamodb')
-    usuarios_table = dynamodb(os.environ.get('TABLE_USUARIOS'))
-    cuentas_table = dynamodb(os.environ.get('TABLE_CUENTA'))
+    usuarios_table = dynamodb.Table(os.environ.get('TABLE_USUARIOS'))
+    cuentas_table = dynamodb.Table(os.environ.get('TABLE_CUENTA'))
 
     response = usuarios_table.get_item(Key={'usuario_id': usuario_id})
     if 'Item' not in response:

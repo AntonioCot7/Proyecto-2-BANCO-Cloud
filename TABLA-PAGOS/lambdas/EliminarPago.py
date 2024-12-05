@@ -1,9 +1,10 @@
 import boto3
 import json
+import os
 
 # Conexión a DynamoDB
 dynamodb = boto3.resource('dynamodb')
-pagos_table = dynamodb.Table('TABLA-PAGOS')
+pagos_table = dynamodb.Table(os.environ.get('PAGOS_TABLE'))
 
 def lambda_handler(event, context):
     print(f"Event recibido: {event}")  # Log para inspeccionar el evento recibido

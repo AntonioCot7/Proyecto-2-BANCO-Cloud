@@ -20,8 +20,8 @@ def lambda_handler(event, context):
         transaccion_id = str(uuid.uuid4())
         
         # Tablas de DynamoDB
-        transaccion_table = dynamodb(os.environ.get('TRANSACTION_TABLE'))
-        cuenta_table = dynamodb(os.environ.get('CUENTAS_TABLE'))
+        transaccion_table = dynamodb.Table(os.environ.get('TRANSACTION_TABLE'))
+        cuenta_table = dynamodb.Table(os.environ.get('CUENTAS_TABLE'))
 
         # Validar que las cuentas existan
         cuenta_origen_data = cuenta_table.get_item(Key={'usuario_id': usuario_origen, 'cuenta_id': cuenta_origen})

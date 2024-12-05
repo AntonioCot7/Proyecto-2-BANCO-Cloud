@@ -23,7 +23,7 @@ def lambda_handler(event, context):
         }
 
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('USUARIOS_TABLE'))
+    table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
     
     existing_user = table.get_item(Key={'usuario_id': usuario_id})
     if 'Item' not in existing_user:

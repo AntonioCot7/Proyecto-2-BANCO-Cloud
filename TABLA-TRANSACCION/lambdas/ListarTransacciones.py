@@ -12,7 +12,7 @@ def lambda_handler(event, context):
         cuenta_origen = data['cuenta_origen']
         
         # Obtener referencia a la tabla de transacciones
-        transaccion_table = dynamodb(os.environ.get('TRANSACTION_TABLE'))
+        transaccion_table = dynamodb.Table(os.environ.get('TRANSACTION_TABLE'))
     
         
         # Consultar transacciones por cuenta origen

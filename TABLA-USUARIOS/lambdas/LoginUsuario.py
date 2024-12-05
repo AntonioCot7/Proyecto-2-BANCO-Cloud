@@ -39,7 +39,7 @@ def lambda_handler(event, context):
     hashed_password = hash_password(password)
 
     dynamodb = boto3.resource('dynamodb')
-    usuarios_table = dynamodb(os.environ.get('USUARIOS_TABLE'))
+    usuarios_table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
 
     response = usuarios_table.scan(
         FilterExpression="email = :email_val",

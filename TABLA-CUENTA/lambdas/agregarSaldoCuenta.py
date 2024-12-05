@@ -17,7 +17,7 @@ def decimal_to_serializable(obj):
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('TABLE_CUENTA'))
+    table = dynamodb.Table(os.environ.get('TABLE_CUENTA'))
 
     try:
         # Procesar el cuerpo de la solicitud

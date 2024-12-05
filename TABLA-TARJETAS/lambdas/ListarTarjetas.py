@@ -38,8 +38,8 @@ def lambda_handler(event, context):
 
         # Inicializar DynamoDB
         dynamodb = boto3.resource('dynamodb')
-        cuentas_table = dynamodb(os.environ.get('CUENTAS_TABLE'))
-        tarjetas_table = dynamodb(os.environ.get('TARJETAS_TABLE'))
+        cuentas_table = dynamodb.Table(os.environ.get('CUENTAS_TABLE'))
+        tarjetas_table = dynamodb.Table(os.environ.get('TARJETAS_TABLE'))
 
         # Validar que la cuenta exista para el usuario
         cuenta_response = cuentas_table.get_item(Key={'usuario_id': usuario_id, 'cuenta_id': cuenta_id})

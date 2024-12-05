@@ -4,7 +4,7 @@ import os
 
 def lambda_handler(event, context):
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb(os.environ.get('USUARIOS_TABLE'))
+    table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
     
     usuario_id = event.get('usuario_id')
     
