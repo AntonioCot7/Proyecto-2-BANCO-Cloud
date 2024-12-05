@@ -50,8 +50,8 @@ def lambda_handler(event, context):
         }
 
     email_response = usuarios_table.query(
-        IndexName='email-index',  # Nombre del índice secundario global para email
-        KeyConditionExpression=Key('email').eq(body['email'])
+        IndexName = os.environ.get('GSI_EMAIL'),  # Nombre del índice secundario global para email
+        KeyConditionExpression = Key('email').eq(body['email'])
     )
     
     if email_response.get('Items'):
@@ -63,7 +63,7 @@ def lambda_handler(event, context):
         }
 
     dni_response = usuarios_table.query(
-        IndexName='dni-index',  # Nombre del índice secundario global para dni
+        IndexName = os.environ.get('GSI_DNI'),  # Nombre del índice secundario global para dni
         KeyConditionExpression=Key('dni').eq(body['dni'])
     )
     

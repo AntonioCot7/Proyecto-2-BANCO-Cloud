@@ -33,7 +33,7 @@ def lambda_handler(event, context):
 
     if 'email' in updated_data:
         email_response = table.query(
-            IndexName='email-index',
+            IndexName= os.environ.get('GSI_EMAIL'),
             KeyConditionExpression=Key('email').eq(updated_data['email'])
         )
         if email_response.get('Items'):
@@ -46,7 +46,7 @@ def lambda_handler(event, context):
 
     if 'dni' in updated_data:
         dni_response = table.query(
-            IndexName='dni-index',
+            IndexName= os.environ.get('GSI_DNI'),
             KeyConditionExpression=Key('dni').eq(updated_data['dni'])
         )
         if dni_response.get('Items'):

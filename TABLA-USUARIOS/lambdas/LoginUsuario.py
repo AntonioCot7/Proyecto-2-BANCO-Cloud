@@ -67,7 +67,7 @@ def lambda_handler(event, context):
     token = str(uuid.uuid4())
     expires = (datetime.now() + timedelta(minutes=60)).strftime('%Y-%m-%d %H:%M:%S')
 
-    tokens_table = dynamodb(os.environ.get('TOKENS_TABLE'))
+    tokens_table = dynamodb.Table(os.environ.get('TOKENS_TABLE'))
     tokens_table.put_item(
         Item={
             'token': token,

@@ -13,10 +13,6 @@ provider:
   environment:
     USUARIOS_TABLE: TABLA-USUARIOS-${sls:stage}
     TOKENS_TABLE: TABLA-TOKENS_ACCESO-${sls:stage}
-    GSI: provider:
-  environment:
-    USUARIOS_TABLE: TABLA-USUARIOS-${sls:stage}
-    TOKENS_TABLE: TABLA-TOKENS_ACCESO-${sls:stage}
     GSI_EMAIL: email-index-${sls:stage}  # Índice de email
     GSI_DNI: dni-index-${sls:stage}  # Índice de dni
 
