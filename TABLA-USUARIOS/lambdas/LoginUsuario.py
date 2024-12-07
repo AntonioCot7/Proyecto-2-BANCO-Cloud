@@ -1,12 +1,8 @@
 import boto3
-import hashlib
 import uuid
 from datetime import datetime, timedelta
 import json
 import os
-
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
     if 'body' in event:
@@ -36,8 +32,6 @@ def lambda_handler(event, context):
             }
         }
 
-    hashed_password = hash_password(password)
-
     dynamodb = boto3.resource('dynamodb')
     usuarios_table = dynamodb.Table(os.environ.get('USUARIOS_TABLE'))
 
@@ -56,7 +50,7 @@ def lambda_handler(event, context):
         }
 
     user = items[0]
-    if hashed_password != user['password']:
+    if password != user['password']:  # Comparación de contraseña en texto plano
         return {
             'statusCode': 403,
             'body': {
