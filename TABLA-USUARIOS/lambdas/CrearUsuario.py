@@ -1,13 +1,9 @@
 import boto3
-import hashlib
 import uuid
 import json
 from datetime import datetime, timedelta
 from boto3.dynamodb.conditions import Key
 import os
-
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
 
 def generate_token():
     return str(uuid.uuid4())
@@ -76,7 +72,6 @@ def lambda_handler(event, context):
         }
 
     usuario_id = get_next_user_id(usuarios_table)
-    hashed_password = hash_password(body['password'])
 
     usuarios_table.put_item(
         Item={
@@ -88,7 +83,7 @@ def lambda_handler(event, context):
             'dni': body['dni'],
             'direccion': body['direccion'],
             'fecha_nac': body['fecha_nac'],
-            'password': hashed_password
+            'password': body['password']  # Contraseña en texto plano
         }
     )
 
